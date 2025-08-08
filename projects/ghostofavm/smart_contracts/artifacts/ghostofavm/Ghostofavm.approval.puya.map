@@ -1,0 +1,836 @@
+{
+  "version": 3,
+  "sources": [
+    "/home/bit/code/ghostofavm/projects/ghostofavm/smart_contracts/ghostofavm/contract.algo.ts"
+  ],
+  "mappings": ";;;;AAGA;;AAAA;;;AAAA;;;;;;;;;;;;;;;;;AAAA;;;AAAA;;;;;;;;AAAA;;;AAgBG;;AAAA;AAAA;AAAA;;AAAA;AAAA;AAhBH;;;AAAA;AAAA;;;AAAA;AAgBG;;;AAAA;;AAPA;;AAAA;AAAA;AAAA;;AAAA;AAAA;AATH;;;AAAA;AAAA;;;AAAA;AASG;;;AAAA;;AAPA;;AAAA;AAAA;AAAA;;AAAA;AAAA;AAFH;;;AAAA;AAAA;;;AAAA;AAEG;;;AAAA;;AAAD;;;;;AAEuC;;AAAA;;AAAA;AAArC;;;AACM;;AAAA;AAAA;;AAAJ;AAAA;AADuD;AAAA;AAAA;;;;;;AAK3D;;;;;AAEuC;;AAAA;;AAAA;AAArC;;;AACM;;AAAA;AAAA;;AAAJ;AAAA;AADuD;AAAA;AAAA;;;;;;AAK3D;;;;;AAEuC;;AAAA;;AAAA;AAArC;;;AACM;;AAAA;AAAA;;AAAJ;AADuD;AAAA;AAAA;;;;;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 1"
+    },
+    "4": {
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "6": {
+      "op": "bz main_after_if_else@9",
+      "stack_out": []
+    },
+    "9": {
+      "op": "pushbytess 0xb09919f7 0xe22b0f0d 0xd0bdbf06 // method \"blkTimestamp(uint64,uint64)void\", method \"blkTxnCounter(uint64,uint64)void\", method \"blkProposer(uint64,uint64)void\"",
+      "defined_out": [
+        "Method(blkProposer(uint64,uint64)void)",
+        "Method(blkTimestamp(uint64,uint64)void)",
+        "Method(blkTxnCounter(uint64,uint64)void)"
+      ],
+      "stack_out": [
+        "Method(blkTimestamp(uint64,uint64)void)",
+        "Method(blkTxnCounter(uint64,uint64)void)",
+        "Method(blkProposer(uint64,uint64)void)"
+      ]
+    },
+    "26": {
+      "op": "txna ApplicationArgs 0",
+      "defined_out": [
+        "Method(blkProposer(uint64,uint64)void)",
+        "Method(blkTimestamp(uint64,uint64)void)",
+        "Method(blkTxnCounter(uint64,uint64)void)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "Method(blkTimestamp(uint64,uint64)void)",
+        "Method(blkTxnCounter(uint64,uint64)void)",
+        "Method(blkProposer(uint64,uint64)void)",
+        "tmp%2#0"
+      ]
+    },
+    "29": {
+      "op": "match main_blkTimestamp_route@3 main_blkTxnCounter_route@4 main_blkProposer_route@5",
+      "stack_out": []
+    },
+    "37": {
+      "block": "main_after_if_else@9",
+      "stack_in": [],
+      "op": "pushint 0 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "39": {
+      "op": "return",
+      "stack_out": []
+    },
+    "40": {
+      "block": "main_blkProposer_route@5",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%15#0"
+      ],
+      "stack_out": [
+        "tmp%15#0"
+      ]
+    },
+    "42": {
+      "op": "!",
+      "defined_out": [
+        "tmp%16#0"
+      ],
+      "stack_out": [
+        "tmp%16#0"
+      ]
+    },
+    "43": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "44": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%17#0"
+      ],
+      "stack_out": [
+        "tmp%17#0"
+      ]
+    },
+    "46": {
+      "op": "!",
+      "defined_out": [
+        "tmp%18#0"
+      ],
+      "stack_out": [
+        "tmp%18#0"
+      ]
+    },
+    "47": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "48": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%4#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%4#0"
+      ]
+    },
+    "51": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%19#0"
+      ],
+      "stack_out": [
+        "tmp%19#0"
+      ]
+    },
+    "52": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "reinterpret_bytes[8]%5#0",
+        "tmp%19#0"
+      ],
+      "stack_out": [
+        "tmp%19#0",
+        "reinterpret_bytes[8]%5#0"
+      ]
+    },
+    "55": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%19#0",
+        "tmp%20#0"
+      ],
+      "stack_out": [
+        "tmp%19#0",
+        "tmp%20#0"
+      ]
+    },
+    "56": {
+      "callsub": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkProposer",
+      "op": "callsub blkProposer",
+      "stack_out": []
+    },
+    "59": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "60": {
+      "op": "return",
+      "stack_out": []
+    },
+    "61": {
+      "block": "main_blkTxnCounter_route@4",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "63": {
+      "op": "!",
+      "defined_out": [
+        "tmp%10#0"
+      ],
+      "stack_out": [
+        "tmp%10#0"
+      ]
+    },
+    "64": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "65": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%11#0"
+      ],
+      "stack_out": [
+        "tmp%11#0"
+      ]
+    },
+    "67": {
+      "op": "!",
+      "defined_out": [
+        "tmp%12#0"
+      ],
+      "stack_out": [
+        "tmp%12#0"
+      ]
+    },
+    "68": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "69": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%2#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%2#0"
+      ]
+    },
+    "72": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0"
+      ]
+    },
+    "73": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "reinterpret_bytes[8]%3#0",
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%13#0",
+        "reinterpret_bytes[8]%3#0"
+      ]
+    },
+    "76": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%13#0",
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%13#0",
+        "tmp%14#0"
+      ]
+    },
+    "77": {
+      "callsub": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTxnCounter",
+      "op": "callsub blkTxnCounter",
+      "stack_out": []
+    },
+    "80": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "81": {
+      "op": "return",
+      "stack_out": []
+    },
+    "82": {
+      "block": "main_blkTimestamp_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "84": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "85": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "86": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "88": {
+      "op": "!",
+      "defined_out": [
+        "tmp%6#0"
+      ],
+      "stack_out": [
+        "tmp%6#0"
+      ]
+    },
+    "89": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "90": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%0#0"
+      ]
+    },
+    "93": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "94": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "reinterpret_bytes[8]%1#0",
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "reinterpret_bytes[8]%1#0"
+      ]
+    },
+    "97": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%7#0",
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%7#0",
+        "tmp%8#0"
+      ]
+    },
+    "98": {
+      "callsub": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTimestamp",
+      "op": "callsub blkTimestamp",
+      "stack_out": []
+    },
+    "101": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "102": {
+      "op": "return",
+      "stack_out": []
+    },
+    "103": {
+      "subroutine": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTimestamp",
+      "params": {
+        "firstRound#0": "uint64",
+        "lastRound#0": "uint64"
+      },
+      "block": "blkTimestamp",
+      "stack_in": [],
+      "op": "proto 2 0"
+    },
+    "106": {
+      "op": "frame_dig -2",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "108": {
+      "block": "blkTimestamp_while_top@1",
+      "stack_in": [
+        "round#1"
+      ],
+      "op": "frame_dig 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "110": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "lastRound#0 (copy)",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "lastRound#0 (copy)"
+      ]
+    },
+    "112": {
+      "op": "<=",
+      "defined_out": [
+        "round#1",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "tmp%0#0"
+      ]
+    },
+    "113": {
+      "op": "bz blkTimestamp_after_while@3",
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "116": {
+      "op": "frame_dig 0",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "118": {
+      "op": "dup",
+      "defined_out": [
+        "round#1",
+        "round#1 (copy)"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "round#1 (copy)"
+      ]
+    },
+    "119": {
+      "op": "block BlkTimestamp",
+      "defined_out": [
+        "round#1",
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "tmp%1#0"
+      ]
+    },
+    "121": {
+      "op": "itob",
+      "defined_out": [
+        "round#1",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "tmp%2#0"
+      ]
+    },
+    "122": {
+      "op": "log",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "123": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "1"
+      ]
+    },
+    "124": {
+      "op": "+",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "125": {
+      "op": "frame_bury 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "127": {
+      "op": "b blkTimestamp_while_top@1"
+    },
+    "130": {
+      "block": "blkTimestamp_after_while@3",
+      "stack_in": [
+        "round#1"
+      ],
+      "retsub": true,
+      "op": "retsub"
+    },
+    "131": {
+      "subroutine": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTxnCounter",
+      "params": {
+        "firstRound#0": "uint64",
+        "lastRound#0": "uint64"
+      },
+      "block": "blkTxnCounter",
+      "stack_in": [],
+      "op": "proto 2 0"
+    },
+    "134": {
+      "op": "frame_dig -2",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "136": {
+      "block": "blkTxnCounter_while_top@1",
+      "stack_in": [
+        "round#1"
+      ],
+      "op": "frame_dig 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "138": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "lastRound#0 (copy)",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "lastRound#0 (copy)"
+      ]
+    },
+    "140": {
+      "op": "<=",
+      "defined_out": [
+        "round#1",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "tmp%0#0"
+      ]
+    },
+    "141": {
+      "op": "bz blkTxnCounter_after_while@3",
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "144": {
+      "op": "frame_dig 0",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "146": {
+      "op": "dup",
+      "defined_out": [
+        "round#1",
+        "round#1 (copy)"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "round#1 (copy)"
+      ]
+    },
+    "147": {
+      "op": "block BlkTxnCounter",
+      "defined_out": [
+        "round#1",
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "tmp%1#0"
+      ]
+    },
+    "149": {
+      "op": "itob",
+      "defined_out": [
+        "round#1",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "tmp%2#0"
+      ]
+    },
+    "150": {
+      "op": "log",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "151": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "1"
+      ]
+    },
+    "152": {
+      "op": "+",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "153": {
+      "op": "frame_bury 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "155": {
+      "op": "b blkTxnCounter_while_top@1"
+    },
+    "158": {
+      "block": "blkTxnCounter_after_while@3",
+      "stack_in": [
+        "round#1"
+      ],
+      "retsub": true,
+      "op": "retsub"
+    },
+    "159": {
+      "subroutine": "smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkProposer",
+      "params": {
+        "firstRound#0": "uint64",
+        "lastRound#0": "uint64"
+      },
+      "block": "blkProposer",
+      "stack_in": [],
+      "op": "proto 2 0"
+    },
+    "162": {
+      "op": "frame_dig -2",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "164": {
+      "block": "blkProposer_while_top@1",
+      "stack_in": [
+        "round#1"
+      ],
+      "op": "frame_dig 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "166": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "lastRound#0 (copy)",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "lastRound#0 (copy)"
+      ]
+    },
+    "168": {
+      "op": "<=",
+      "defined_out": [
+        "round#1",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "tmp%0#0"
+      ]
+    },
+    "169": {
+      "op": "bz blkProposer_after_while@3",
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "172": {
+      "op": "frame_dig 0",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "174": {
+      "op": "dup",
+      "defined_out": [
+        "round#1",
+        "round#1 (copy)"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "round#1 (copy)"
+      ]
+    },
+    "175": {
+      "op": "block BlkProposer",
+      "defined_out": [
+        "round#1",
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "tmp%1#0"
+      ]
+    },
+    "177": {
+      "op": "log",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "178": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1",
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1",
+        "round#1",
+        "1"
+      ]
+    },
+    "179": {
+      "op": "+",
+      "stack_out": [
+        "round#1",
+        "round#1"
+      ]
+    },
+    "180": {
+      "op": "frame_bury 0",
+      "defined_out": [
+        "round#1"
+      ],
+      "stack_out": [
+        "round#1"
+      ]
+    },
+    "182": {
+      "op": "b blkProposer_while_top@1"
+    },
+    "185": {
+      "block": "blkProposer_after_while@3",
+      "stack_in": [
+        "round#1"
+      ],
+      "retsub": true,
+      "op": "retsub"
+    }
+  }
+}

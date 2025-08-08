@@ -1,0 +1,185 @@
+#pragma version 11
+#pragma typetrack false
+
+// @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
+main:
+    intcblock 1
+    // smart_contracts/ghostofavm/contract.algo.ts:4-5
+    // @contract({ avmVersion: 11 })
+    // export class Ghostofavm extends Contract {
+    txn NumAppArgs
+    bz main_after_if_else@9
+    pushbytess 0xb09919f7 0xe22b0f0d 0xd0bdbf06 // method "blkTimestamp(uint64,uint64)void", method "blkTxnCounter(uint64,uint64)void", method "blkProposer(uint64,uint64)void"
+    txna ApplicationArgs 0
+    match main_blkTimestamp_route@3 main_blkTxnCounter_route@4 main_blkProposer_route@5
+
+main_after_if_else@9:
+    // smart_contracts/ghostofavm/contract.algo.ts:4-5
+    // @contract({ avmVersion: 11 })
+    // export class Ghostofavm extends Contract {
+    pushint 0 // 0
+    return
+
+main_blkProposer_route@5:
+    // smart_contracts/ghostofavm/contract.algo.ts:20
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    // smart_contracts/ghostofavm/contract.algo.ts:4-5
+    // @contract({ avmVersion: 11 })
+    // export class Ghostofavm extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // smart_contracts/ghostofavm/contract.algo.ts:20
+    // @abimethod({ onCreate: 'require' })
+    callsub blkProposer
+    intc_0 // 1
+    return
+
+main_blkTxnCounter_route@4:
+    // smart_contracts/ghostofavm/contract.algo.ts:13
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    // smart_contracts/ghostofavm/contract.algo.ts:4-5
+    // @contract({ avmVersion: 11 })
+    // export class Ghostofavm extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // smart_contracts/ghostofavm/contract.algo.ts:13
+    // @abimethod({ onCreate: 'require' })
+    callsub blkTxnCounter
+    intc_0 // 1
+    return
+
+main_blkTimestamp_route@3:
+    // smart_contracts/ghostofavm/contract.algo.ts:6
+    // @abimethod({ onCreate: 'require' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    // smart_contracts/ghostofavm/contract.algo.ts:4-5
+    // @contract({ avmVersion: 11 })
+    // export class Ghostofavm extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    // smart_contracts/ghostofavm/contract.algo.ts:6
+    // @abimethod({ onCreate: 'require' })
+    callsub blkTimestamp
+    intc_0 // 1
+    return
+
+
+// smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTimestamp(firstRound: uint64, lastRound: uint64) -> void:
+blkTimestamp:
+    // smart_contracts/ghostofavm/contract.algo.ts:6-7
+    // @abimethod({ onCreate: 'require' })
+    // public blkTimestamp(firstRound: uint64, lastRound: uint64) {
+    proto 2 0
+    frame_dig -2
+
+blkTimestamp_while_top@1:
+    // smart_contracts/ghostofavm/contract.algo.ts:8
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    frame_dig 0
+    frame_dig -1
+    <=
+    bz blkTimestamp_after_while@3
+    // smart_contracts/ghostofavm/contract.algo.ts:9
+    // log(op.Block.blkTimestamp(round))
+    frame_dig 0
+    dup
+    block BlkTimestamp
+    itob
+    log
+    // smart_contracts/ghostofavm/contract.algo.ts:8
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    intc_0 // 1
+    +
+    frame_bury 0
+    b blkTimestamp_while_top@1
+
+blkTimestamp_after_while@3:
+    retsub
+
+
+// smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTxnCounter(firstRound: uint64, lastRound: uint64) -> void:
+blkTxnCounter:
+    // smart_contracts/ghostofavm/contract.algo.ts:13-14
+    // @abimethod({ onCreate: 'require' })
+    // public blkTxnCounter(firstRound: uint64, lastRound: uint64) {
+    proto 2 0
+    frame_dig -2
+
+blkTxnCounter_while_top@1:
+    // smart_contracts/ghostofavm/contract.algo.ts:15
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    frame_dig 0
+    frame_dig -1
+    <=
+    bz blkTxnCounter_after_while@3
+    // smart_contracts/ghostofavm/contract.algo.ts:16
+    // log(op.Block.blkTxnCounter(round))
+    frame_dig 0
+    dup
+    block BlkTxnCounter
+    itob
+    log
+    // smart_contracts/ghostofavm/contract.algo.ts:15
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    intc_0 // 1
+    +
+    frame_bury 0
+    b blkTxnCounter_while_top@1
+
+blkTxnCounter_after_while@3:
+    retsub
+
+
+// smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkProposer(firstRound: uint64, lastRound: uint64) -> void:
+blkProposer:
+    // smart_contracts/ghostofavm/contract.algo.ts:20-21
+    // @abimethod({ onCreate: 'require' })
+    // public blkProposer(firstRound: uint64, lastRound: uint64) {
+    proto 2 0
+    frame_dig -2
+
+blkProposer_while_top@1:
+    // smart_contracts/ghostofavm/contract.algo.ts:22
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    frame_dig 0
+    frame_dig -1
+    <=
+    bz blkProposer_after_while@3
+    // smart_contracts/ghostofavm/contract.algo.ts:23
+    // log(op.Block.blkProposer(round))
+    frame_dig 0
+    dup
+    block BlkProposer
+    log
+    // smart_contracts/ghostofavm/contract.algo.ts:22
+    // for (let round: uint64 = firstRound; round <= lastRound; round++) {
+    intc_0 // 1
+    +
+    frame_bury 0
+    b blkProposer_while_top@1
+
+blkProposer_after_while@3:
+    retsub
