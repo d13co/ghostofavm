@@ -2,6 +2,7 @@ import { Config } from '@algorandfoundation/algokit-utils'
 import { registerDebugEventHandlers } from '@algorandfoundation/algokit-utils-debug'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
 import { Address, decodeUint64, encodeAddress } from 'algosdk'
+import pMap from 'p-map'
 import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { APP_SPEC, GhostofavmFactory } from '../artifacts/ghostofavm/GhostofavmClient'
 
@@ -17,8 +18,9 @@ describe('Ghostofavm contract', () => {
   const localnet = algorandFixture()
   beforeAll(() => {
     Config.configure({
-      debug: true,
+      // debug: true,
       // traceAll: true,
+      populateAppCallResources: false,
     })
     registerDebugEventHandlers()
   })
@@ -60,14 +62,23 @@ describe('Ghostofavm contract', () => {
     const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
     const results = zip(rounds, ts)
 
-    for (const [round, timestampExpected] of Object.entries(results)) {
-      const {
-        block: {
-          header: { timestamp: timestampActual },
-        },
-      } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-      expect(timestampActual).toBe(BigInt(timestampExpected!))
-    }
+    const timeLabel = 'fetch ' + rounds.length
+    console.time(timeLabel)
+    await pMap(
+      Object.entries(results),
+      async ([round, tsExpected]) => {
+        {
+          const {
+            block: {
+              header: { timestamp: tsActual },
+            },
+          } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
+          expect(tsActual).toBe(BigInt(tsExpected!))
+        }
+      },
+      { concurrency: 100 },
+    )
+    console.timeEnd(timeLabel)
   })
 
   test('2blkTimestamp + blkTxnCounter', async () => {
@@ -112,15 +123,21 @@ describe('Ghostofavm contract', () => {
 
     const timeLabel = 'fetch ' + rounds.length
     console.time(timeLabel)
-    for (const [round, { ts: tsExpected, tc: tcExpected }] of Object.entries(results)) {
-      const {
-        block: {
-          header: { timestamp: tsActual, txnCounter: tcActual },
-        },
-      } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-      expect(tsActual).toBe(BigInt(tsExpected))
-      expect(tcActual).toBe(BigInt(tcExpected))
-    }
+    await pMap(
+      Object.entries(results),
+      async ([round, { ts: tsExpected, tc: tcExpected }]) => {
+        {
+          const {
+            block: {
+              header: { timestamp: tsActual, txnCounter: tcActual },
+            },
+          } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
+          expect(tsActual).toBe(BigInt(tsExpected))
+          expect(tcActual).toBe(BigInt(tcExpected))
+        }
+      },
+      { concurrency: 100 },
+    )
     console.timeEnd(timeLabel)
   })
 
@@ -175,16 +192,22 @@ describe('Ghostofavm contract', () => {
 
     const timeLabel = 'fetch ' + rounds.length
     console.time(timeLabel)
-    for (const [round, { ts: tsExpected, tc: tcExpected, prp: prpExpected }] of Object.entries(results)) {
-      const {
-        block: {
-          header: { timestamp: tsActual, txnCounter: tcActual, proposer: prpActual },
-        },
-      } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-      expect(tsActual).toBe(BigInt(tsExpected))
-      expect(tcActual).toBe(BigInt(tcExpected))
-      expect(prpActual.toString()).toBe(prpExpected)
-    }
+    await pMap(
+      Object.entries(results),
+      async ([round, { ts: tsExpected, tc: tcExpected, prp: prpExpected }]) => {
+        {
+          const {
+            block: {
+              header: { timestamp: tsActual, txnCounter: tcActual, proposer: prpActual },
+            },
+          } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
+          expect(tsActual).toBe(BigInt(tsExpected))
+          expect(tcActual).toBe(BigInt(tcExpected))
+          expect(prpActual.toString()).toBe(prpExpected)
+        }
+      },
+      { concurrency: 100 },
+    )
     console.timeEnd(timeLabel)
   })
 })
