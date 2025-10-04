@@ -8,6 +8,12 @@ export type BlkData = {
   proposer: Account
 }
 
+export type AcctBalanceData = {
+  address: Account
+  balance: uint64
+  minBalance: uint64
+}
+
 @contract({ avmVersion: 11 })
 export class Ghostofavm extends Contract {
   @abimethod({ onCreate: 'require' })
@@ -46,5 +52,18 @@ export class Ghostofavm extends Contract {
       log(encodeArc4(blkData))
     }
     return { round: 0, timestamp: 0, proposer: Global.zeroAddress, txnCounter: 0 }
+  }
+
+  @abimethod({ onCreate: 'require' })
+  public acctBalanceData(accounts: Account[]): AcctBalanceData {
+    for (const account of accounts) {
+      const acctBalanceData: AcctBalanceData = {
+        address: account,
+        balance: account.balance,
+        minBalance: account.minBalance,
+      }
+      log(encodeArc4(acctBalanceData))
+    }
+    return { address: Global.zeroAddress, balance: 0, minBalance: 0 }
   }
 }
