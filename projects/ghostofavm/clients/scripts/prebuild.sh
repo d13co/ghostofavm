@@ -2,9 +2,9 @@
 
 cd -- "$(dirname -- "$0")" || exit 1
 
-mkdir -p ../src/generated
+mkdir -p artifacts
 
-cp  ../../smart_contracts/artifacts/ghostofavm/Ghostofavm.arc56.json ../src/generated/
+cp  ../../smart_contracts/artifacts/ghostofavm/Ghostofavm.arc56.json artifacts/
 
-npx @algorandfoundation/algokit-client-generator generate -o ../src/generated/GhostofavmClient.ts -a ../src/generated/Ghostofavm.arc56.json
+npx @algorandfoundation/algokit-client-generator generate -o artifacts/GhostofavmClient.ts -a artifacts/Ghostofavm.arc56.json
 

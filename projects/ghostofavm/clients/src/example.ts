@@ -16,7 +16,7 @@ console.log(
 )
 
 console.log(
-  await sdk.blkProposers(
+  await sdk.blkProposer(
     { firstRound: lastRound - delta, lastRound: lastRound - 1n },
     { firstValidRound: lastRound + 1n, lastValidRound: lastRound + 1n },
   ),

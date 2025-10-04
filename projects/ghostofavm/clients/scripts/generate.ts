@@ -1,21 +1,24 @@
 import { ABIMethod } from 'algosdk'
-import { sign } from 'crypto'
-import { readFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 // Change to the parent directory of where the script is located
 process.chdir(dirname(dirname(fileURLToPath(import.meta.url))))
 
-const template = readFileSync('scripts/index.ts.template').toString()
-const methodTemplate = readFileSync('scripts/method.ts.template').toString()
-const appSpec = JSON.parse(readFileSync('src/generated/Ghostofavm.arc56.json').toString())
+const template = readFileSync('scripts/templates/index.ts.template').toString()
+const methodTemplate = readFileSync('scripts/templates/method.ts.template').toString()
+const client = readFileSync('scripts/artifacts/GhostofavmClient.ts').toString()
+
+const appSpec = JSON.parse(readFileSync('scripts/artifacts/Ghostofavm.arc56.json').toString())
 
 const { name } = appSpec
 
-let built = template.replace(/\{\{ARC56_NAME\}\}/g, name)
+let built = client
+  .replace(`export class ${name}Client`, `class ${name}Client`)
+  .replace(`export class ${name}Factory`, `class ${name}Factory`)
 
-console.log(built)
+built += template.replace(/\{\{ARC56_NAME\}\}/g, name)
 
 let methodStr: string[] = []
 
@@ -38,9 +41,13 @@ for (const method of appSpec.methods) {
 
   console.log({ methodName, methodSignature })
 
-  methodStr.push(methodTemplate.replace(/\{\{\METHOD_NAME}\}/g, methodName).replace(/\{\{\METHOD_SIGNATURE}\}/g, methodSignature))
+  methodStr.push(
+    methodTemplate.replace(/\{\{\METHOD_NAME}\}/g, methodName).replace(/\{\{\METHOD_SIGNATURE}\}/g, methodSignature),
+  )
 }
 
-built = built.replace(/{{METHODS}}/, methodStr.join('\n\n'))
+built = built.replace(/{{METHODS}}/, methodStr.join('\n'))
 
-console.log(built)
+writeFileSync('src/index.ts', built)
+
+console.log(`export class ${name}Client`)
