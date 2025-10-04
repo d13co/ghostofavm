@@ -41,7 +41,7 @@ export class Ghostofavm extends Contract {
   }
 
   @abimethod({ readonly: true, onCreate: 'require' })
-  public getBlkData(firstRound: uint64, lastRound: uint64): BlkData {
+  public blkData(firstRound: uint64, lastRound: uint64): BlkData {
     for (let round: uint64 = firstRound; round <= lastRound; round++) {
       const blkData: BlkData = {
         round,

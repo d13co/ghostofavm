@@ -8,10 +8,11 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "sourceMap": true,
-    "rootDir": ".",
+    "rootDir": "src",
+    "skipLibCheck": true,
     "outDir": "dist",
-    "skipLibCheck": true
+    "module": "CommonJS"
   },
-  "include": ["src", "scripts"],
+  "include": ["src"],
   "exclude": ["**/@types/service-worker-mock/**"]
 }

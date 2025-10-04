@@ -64,7 +64,7 @@ class GhostBase {
 
     const retTypeStr = specRetObj.struct ?? specRetObj.type
     const retData: T[] = []
-
+    console.log("Decoding", methodName, "as", retTypeStr)
     for (let i = 0; i < logs.length; i++) {
       retData.push(getABIDecodedValue(new Uint8Array(logs[i]), retTypeStr, this.factory.appSpec.structs) as T)
     }

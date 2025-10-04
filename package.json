@@ -1,0 +1,7 @@
+{
+  "name": "ghostkit-genesis",
+  "private": true,
+  "workspaces": [
+    "projects/*"
+  ]
+}

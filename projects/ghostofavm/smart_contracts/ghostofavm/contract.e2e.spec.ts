@@ -1,18 +1,9 @@
 import { Config } from '@algorandfoundation/algokit-utils'
 import { registerDebugEventHandlers } from '@algorandfoundation/algokit-utils-debug'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
-import { Address, decodeUint64, encodeAddress } from 'algosdk'
 import pMap from 'p-map'
 import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
-import { APP_SPEC, GhostofavmFactory } from '../artifacts/ghostofavm/GhostofavmClient'
-
-const approvalProgram = Buffer.from(APP_SPEC.byteCode!.approval, 'base64')
-const clearStateProgram = Buffer.from(APP_SPEC.byteCode!.clear, 'base64')
-
-const numGlobalInts = 0
-const numGlobalByteSlices = 0
-const numLocalInts = 0
-const numLocalByteSlices = 0
+import { GhostofavmSDK } from '../artifacts/ghostofavm/GhostofavmSDK'
 
 describe('Ghostofavm contract', () => {
   const localnet = algorandFixture()
@@ -26,54 +17,34 @@ describe('Ghostofavm contract', () => {
   })
   beforeEach(localnet.newScope)
 
-  const getFactory = (account: Address) => {
-    const factory = localnet.algorand.client.getTypedAppFactory(GhostofavmFactory, {
-      defaultSender: account,
-    })
-    const client = factory.getAppClientById({ appId: 0n })
-    return { factory, client }
-  }
+  test('blkTimestamp', async () => {
+    const { algorand } = localnet
 
-  test('1blkTimestamp', async () => {
-    const { testAccount } = localnet.context
-    const { factory, client } = getFactory(testAccount)
     const { lastRound } = await localnet.algorand.client.algod.status().do()
-
     const firstRound = lastRound - 1000n >= 1n ? lastRound - 1000n : 1n
 
-    const {
-      transactions: [txn],
-    } = await factory.createTransaction.create.blkTimestamp({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
-
-    console.time('sim1')
-    const {
-      confirmations: [{ logs }],
-    } = await client.newGroup().addTransaction(txn).simulate({
-      extraOpcodeBudget: 170_000,
-      allowMoreLogging: true,
-    })
-    console.timeEnd('sim1')
-
-    const ts = logsToUint64(logs ?? [])
+    const sdk = new GhostofavmSDK({ algorand })
+    console.time(`Simulate blkTimestamp`)
+    const firstValidRound = lastRound + 1n
+    const lastValidRound = lastRound + 1n
+    const values = await sdk.blkTimestamp({ firstRound, lastRound }, { firstValidRound, lastValidRound })
     const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
-    const results = zip(rounds, ts)
+    const results = zip(rounds, values)
+
+    console.timeEnd(`Simulate blkTimestamp`)
 
     const timeLabel = 'fetch ' + rounds.length
     console.time(timeLabel)
     await pMap(
       Object.entries(results),
-      async ([round, tsExpected]) => {
+      async ([round, tsActual]) => {
         {
           const {
             block: {
-              header: { timestamp: tsActual },
+              header: { timestamp: tsExpected },
             },
           } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-          expect(tsActual).toBe(BigInt(tsExpected!))
+          expect(tsActual).toBe(tsExpected)
         }
       },
       { concurrency: 100 },
@@ -81,59 +52,34 @@ describe('Ghostofavm contract', () => {
     console.timeEnd(timeLabel)
   })
 
-  test('2blkTimestamp + blkTxnCounter', async () => {
-    const { testAccount } = localnet.context
-    const { factory, client } = getFactory(testAccount)
-    const { lastRound } = await localnet.algorand.client.algod.status().do()
+  test('blkProposer', async () => {
+    const { algorand } = localnet
 
+    const { lastRound } = await localnet.algorand.client.algod.status().do()
     const firstRound = lastRound - 1000n >= 1n ? lastRound - 1000n : 1n
 
-    const {
-      transactions: [txnTs],
-    } = await factory.createTransaction.create.blkTimestamp({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
-
-    const {
-      transactions: [txnTc],
-    } = await factory.createTransaction.create.blkTxnCounter({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
-
-    console.time('sim2')
-    const {
-      confirmations: [{ logs: logsTs }, { logs: logsTc }],
-    } = await client.newGroup().addTransaction(txnTs).addTransaction(txnTc).simulate({
-      extraOpcodeBudget: 170_000,
-      allowMoreLogging: true,
-    })
-    console.timeEnd('sim2')
-
-    const tsArr = logsToUint64(logsTs ?? [])
-    const tcArr = logsToUint64(logsTc ?? [])
+    const sdk = new GhostofavmSDK({ algorand })
+    console.time(`Simulate blkProposer`)
+    const firstValidRound = lastRound + 1n
+    const lastValidRound = lastRound + 1n
+    const values = await sdk.blkProposer({ firstRound, lastRound }, { firstValidRound, lastValidRound })
     const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
-    const results = zip(
-      rounds,
-      tsArr.map((ts, i) => ({ ts, tc: tcArr[i] })),
-    )
+    const results = zip(rounds, values)
+
+    console.timeEnd(`Simulate blkProposer`)
 
     const timeLabel = 'fetch ' + rounds.length
     console.time(timeLabel)
     await pMap(
       Object.entries(results),
-      async ([round, { ts: tsExpected, tc: tcExpected }]) => {
+      async ([round, proposerActual]) => {
         {
           const {
             block: {
-              header: { timestamp: tsActual, txnCounter: tcActual },
+              header: { proposer: proposerExpected },
             },
           } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-          expect(tsActual).toBe(BigInt(tsExpected))
-          expect(tcActual).toBe(BigInt(tcExpected))
+          expect(proposerActual).toBe(proposerExpected.toString())
         }
       },
       { concurrency: 100 },
@@ -141,69 +87,36 @@ describe('Ghostofavm contract', () => {
     console.timeEnd(timeLabel)
   })
 
-  test('3blkTimestamp + blkTxnCounter + blkProposer', async () => {
-    const { testAccount } = localnet.context
-    const { factory, client } = getFactory(testAccount)
-    const { lastRound } = await localnet.algorand.client.algod.status().do()
+  test('blkData', async () => {
+    const { algorand } = localnet
 
+    const { lastRound } = await localnet.algorand.client.algod.status().do()
     const firstRound = lastRound - 1000n >= 1n ? lastRound - 1000n : 1n
 
-    const {
-      transactions: [txnTs],
-    } = await factory.createTransaction.create.blkTimestamp({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
+    const sdk = new GhostofavmSDK({ algorand })
+    console.time(`Simulate blkData`)
+    const firstValidRound = lastRound + 1n
+    const lastValidRound = lastRound + 1n
 
-    const {
-      transactions: [txnTc],
-    } = await factory.createTransaction.create.blkTxnCounter({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
+    const values = await sdk.blkData({ firstRound, lastRound }, { firstValidRound, lastValidRound })
 
-    const {
-      transactions: [txnPrp],
-    } = await factory.createTransaction.create.blkProposer({
-      args: { firstRound, lastRound },
-      firstValidRound: lastRound + 1n,
-      lastValidRound: lastRound + 1n,
-    })
+    console.timeEnd(`Simulate blkData`)
 
-    console.time('sim3')
-    const {
-      confirmations: [{ logs: logsTs }, { logs: logsTc }, { logs: logsPrp }],
-    } = await client.newGroup().addTransaction(txnTs).addTransaction(txnTc).addTransaction(txnPrp).simulate({
-      extraOpcodeBudget: 170_000,
-      allowMoreLogging: true,
-    })
-    console.timeEnd('sim3')
-
-    const tsArr = logsToUint64(logsTs ?? [])
-    const tcArr = logsToUint64(logsTc ?? [])
-    const prpArr = logsToAddress(logsPrp ?? [])
-    const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
-    const results = zip(
-      rounds,
-      tsArr.map((ts, i) => ({ ts, tc: tcArr[i], prp: prpArr[i] })),
-    )
-
-    const timeLabel = 'fetch ' + rounds.length
+    const timeLabel = 'fetch ' + values.length
     console.time(timeLabel)
     await pMap(
-      Object.entries(results),
-      async ([round, { ts: tsExpected, tc: tcExpected, prp: prpExpected }]) => {
+      values,
+      async ({ round, proposer: proposerActual, timestamp: timestampActual, txnCounter: txnCounterActual }) => {
         {
           const {
             block: {
-              header: { timestamp: tsActual, txnCounter: tcActual, proposer: prpActual },
+              header: { proposer: proposerExpected, timestamp: timestampExpected, txnCounter: txnCounterExpected },
             },
           } = await localnet.algorand.client.algod.block(BigInt(round)).headerOnly(true).do()
-          expect(tsActual).toBe(BigInt(tsExpected))
-          expect(tcActual).toBe(BigInt(tcExpected))
-          expect(prpActual.toString()).toBe(prpExpected)
+
+          expect(proposerActual).toBe(proposerExpected.toString())
+          expect(timestampActual).toBe(timestampExpected)
+          expect(txnCounterActual).toBe(txnCounterExpected)
         }
       },
       { concurrency: 100 },
@@ -211,14 +124,6 @@ describe('Ghostofavm contract', () => {
     console.timeEnd(timeLabel)
   })
 })
-
-function logsToUint64(logs: Uint8Array[]): number[] {
-  return logs.map((log) => decodeUint64(log, 'safe'))
-}
-
-function logsToAddress(logs: Uint8Array[]): string[] {
-  return logs.map((log) => encodeAddress(log))
-}
 
 function zip<K extends PropertyKey, V>(keys: K[], values: V[]): Record<K, V> {
   return Object.fromEntries(keys.map((key, i) => [key, values[i]])) as Record<K, V>

@@ -1,21 +1,22 @@
 {
-  "name": "clients",
+  "name": "ghostkit",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "bin": { "ghostkit": "dist/bin.js" },
   "scripts": {
-    "prebuild": "./scripts/prebuild.sh",
     "build": "tsc",
+    "postbuild": "copyfiles -f src/templates/* dist/templates/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@algorandfoundation/algokit-client-generator": "=6.0.0",
-    "typescript": "^5.9.3"
+    "concurrently": "=9.2.1",
+    "typescript": "=5.9.3",
+    "copyfiles": "=2.4.1"
   },
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^9.1.2"
-  },
-  "type": "module"
+  }
 }
