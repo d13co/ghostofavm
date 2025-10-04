@@ -1,22 +1,19 @@
 # ghostofavm
 
-Welcome to your new AlgoKit project!
+Ghost contracts: Contracts that do not exist on chain. They are simulated (create) to return data efficiently from the AVM.
 
-This is your workspace root. A `workspace` in AlgoKit is an orchestrated collection of standalone projects (backends, smart contracts, frontend apps and etc).
+AVM context has access to a lot resources that can be fetched/filtered/combined with a single simulate:
 
-By default, `projects_root_path` parameter is set to `projects`. Which instructs AlgoKit CLI to create a new directory under `projects` directory when new project is instantiated via `algokit init` at the root of the workspace.
+- 128x apps, assets, accounts
+  - e.g. batch account balances
+  - e.g. ABI read methods
+- 1000x blocks
+  - timestamp
+  - txn counter
+  - etc
 
-## Getting Started
+Ghost contracts usually operate on a list of inputs (otherwise a single input could just as efficiently be done with a GET request to algod.)
 
-To get started refer to `README.md` files in respective sub-projects in the `projects` directory.
+In order to avoid running into the 4KB bytestring size restriction of the AVM, Ghost contracts return data by logging individual elements (instead of using ABI return of type xyz[].) The ghost contract client parses each logged line to the appropriate type, with full struct support.
 
-To learn more about algokit, visit [documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md).
 
-### GitHub Codespaces
-
-To get started execute:
-
-1. `algokit generate devcontainer` - invoking this command from the root of this repository will create a `devcontainer.json` file with all the configuration needed to run this project in a GitHub codespace. [Run the repository inside a codespace](https://docs.github.com/en/codespaces/getting-started/quickstart) to get started.
-2. `algokit init` - invoke this command inside a github codespace to launch an interactive wizard to guide you through the process of creating a new AlgoKit project
-
-Powered by [Copier templates](https://copier.readthedocs.io/en/stable/).

@@ -1,0 +1,21 @@
+{
+  "name": "clients",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "./scripts/prebuild.sh",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@algorandfoundation/algokit-client-generator": "=6.0.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@algorandfoundation/algokit-utils": "^9.1.2"
+  },
+  "type": "module"
+}
