@@ -23,7 +23,7 @@ main:
 // smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTimestamp[routing]() -> void:
 blkTimestamp:
     // smart_contracts/ghostofavm/contract.algo.ts:19
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -52,7 +52,7 @@ blkTimestamp_while_top@2:
 
 blkTimestamp_after_while@4:
     // smart_contracts/ghostofavm/contract.algo.ts:19
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     bytec_0 // 0x151f7c750000000000000000
     log
     intc_0 // 1
@@ -62,7 +62,7 @@ blkTimestamp_after_while@4:
 // smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkTxnCounter[routing]() -> void:
 blkTxnCounter:
     // smart_contracts/ghostofavm/contract.algo.ts:27
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -91,7 +91,7 @@ blkTxnCounter_while_top@2:
 
 blkTxnCounter_after_while@4:
     // smart_contracts/ghostofavm/contract.algo.ts:27
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     bytec_0 // 0x151f7c750000000000000000
     log
     intc_0 // 1
@@ -101,7 +101,7 @@ blkTxnCounter_after_while@4:
 // smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.blkProposer[routing]() -> void:
 blkProposer:
     // smart_contracts/ghostofavm/contract.algo.ts:35
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -129,7 +129,7 @@ blkProposer_while_top@2:
 
 blkProposer_after_while@4:
     // smart_contracts/ghostofavm/contract.algo.ts:35
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     pushbytes base32(CUPXY5IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
     log
     intc_0 // 1
@@ -139,7 +139,7 @@ blkProposer_after_while@4:
 // smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.getBlkData[routing]() -> void:
 getBlkData:
     // smart_contracts/ghostofavm/contract.algo.ts:43
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
@@ -194,7 +194,7 @@ getBlkData_while_top@2:
 
 getBlkData_after_while@4:
     // smart_contracts/ghostofavm/contract.algo.ts:43
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     pushbytes base32(CUPXY5IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
     log
     intc_0 // 1
@@ -204,7 +204,7 @@ getBlkData_after_while@4:
 // smart_contracts/ghostofavm/contract.algo.ts::Ghostofavm.acctBalanceData[routing]() -> void:
 acctBalanceData:
     // smart_contracts/ghostofavm/contract.algo.ts:57
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     txna ApplicationArgs 1
     dup
     // smart_contracts/ghostofavm/contract.algo.ts:59
@@ -263,7 +263,7 @@ acctBalanceData_for_header@2:
 
 acctBalanceData_after_for@5:
     // smart_contracts/ghostofavm/contract.algo.ts:57
-    // @abimethod({ onCreate: 'require' })
+    // @abimethod({ readonly: true, onCreate: 'require' })
     pushbytes base32(CUPXY5IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)
     log
     intc_0 // 1
