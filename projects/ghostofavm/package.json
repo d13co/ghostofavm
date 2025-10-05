@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@algorandfoundation/algorand-typescript": "=1.0.0-alpha.87",
-    "ghostkit": "file:../ghostkit",
+    "ghostkit": "^0.0.1-1",
     "p-map": "^7.0.3"
   },
   "devDependencies": {
