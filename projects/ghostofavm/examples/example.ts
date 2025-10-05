@@ -3,29 +3,28 @@ import { GhostofavmSDK } from '../smart_contracts/artifacts/ghostofavm/Ghostofav
 
 (async() => {
   const algorand = AlgorandClient.mainNet()
-  const sdk = new GhostofavmSDK({ algorand })
+  const ghostSDK = new GhostofavmSDK({ algorand })
 
   const { lastRound } = await algorand.client.algod.status().do()
 
-  const delta = 5n
-  const validity = { firstValidRound: lastRound + 1n, lastValidRound: lastRound + 1n }
+  const delta=2n, firstRound = lastRound - delta, validity = { firstValidRound: lastRound + 1n, lastValidRound: lastRound + 1n }
 
   console.log(
-    await sdk.blkTimestamp(
+    await ghostSDK.blkTimestamp(
       { firstRound: lastRound - delta, lastRound: lastRound - 1n },
       validity,
     ),
   )
 
   console.log(
-    await sdk.blkProposer(
+    await ghostSDK.blkProposer(
       { firstRound: lastRound - delta, lastRound: lastRound - 1n },
       validity,
     ),
   )
 
   console.log(
-    await sdk.blkData(
+    await ghostSDK.blkData(
       { firstRound: lastRound - delta, lastRound: lastRound - 1n },
       validity,
     ),
