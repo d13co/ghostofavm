@@ -28,7 +28,10 @@ describe('Ghostofavm contract', () => {
     console.time(`Simulate blkTimestamp`)
     const firstValidRound = lastRound + 1n
     const lastValidRound = lastRound + 1n
-    const values = await sdk.blkTimestamp({ firstRound, lastRound }, { firstValidRound, lastValidRound })
+    const values = await sdk.blkTimestamp({
+      methodArgsOrArgsArray: { firstRound, lastRound },
+      extraMethodCallArgs: { firstValidRound, lastValidRound },
+    })
     const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
     const results = zip(rounds, values)
 
@@ -62,7 +65,10 @@ describe('Ghostofavm contract', () => {
     console.time(`Simulate blkProposer`)
     const firstValidRound = lastRound + 1n
     const lastValidRound = lastRound + 1n
-    const values = await sdk.blkProposer({ firstRound, lastRound }, { firstValidRound, lastValidRound })
+    const values = await sdk.blkProposer({
+      methodArgsOrArgsArray: { firstRound, lastRound },
+      extraMethodCallArgs: { firstValidRound, lastValidRound },
+    })
     const rounds = new Array(Number(lastRound - firstRound + 1n)).fill(1).map((_, i) => Number(firstRound) + i)
     const results = zip(rounds, values)
 
@@ -98,10 +104,10 @@ describe('Ghostofavm contract', () => {
     const firstValidRound = lastRound + 1n
     const lastValidRound = lastRound + 1n
 
-    const values = await sdk.blkData(
-      { firstRound, lastRound },
-      { extraFee: (2000).microAlgo(), firstValidRound, lastValidRound },
-    )
+    const values = await sdk.blkData({
+      methodArgsOrArgsArray: { firstRound, lastRound },
+      extraMethodCallArgs: { extraFee: (2000).microAlgo(), firstValidRound, lastValidRound },
+    })
 
     console.timeEnd(`Simulate blkData`)
 
@@ -158,7 +164,9 @@ describe('Ghostofavm contract', () => {
     await sleep(5000)
 
     console.time(`Simulate acctBalanceData`)
-    const values = await sdk.acctBalanceData([{ accounts }, { accounts: accounts2 }, { accounts: accounts3 }])
+    const values = await sdk.acctBalanceData({
+      methodArgsOrArgsArray: [{ accounts }, { accounts: accounts2 }, { accounts: accounts3 }],
+    })
     console.timeEnd(`Simulate acctBalanceData`)
 
     console.log('simmed')
