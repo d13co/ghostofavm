@@ -16,7 +16,7 @@ export type AcctBalanceData = {
 
 @contract({ avmVersion: 11 })
 export class Ghostofavm extends Contract {
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   public blkTimestamp(firstRound: uint64, lastRound: uint64): uint64 {
     for (let round: uint64 = firstRound; round <= lastRound; round++) {
       log(op.Block.blkTimestamp(round))
@@ -24,7 +24,7 @@ export class Ghostofavm extends Contract {
     return 0
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   public blkTxnCounter(firstRound: uint64, lastRound: uint64): uint64 {
     for (let round: uint64 = firstRound; round <= lastRound; round++) {
       log(op.Block.blkTxnCounter(round))
@@ -32,7 +32,7 @@ export class Ghostofavm extends Contract {
     return 0
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   public blkProposer(firstRound: uint64, lastRound: uint64): Account {
     for (let round: uint64 = firstRound; round <= lastRound; round++) {
       log(op.Block.blkProposer(round))
@@ -40,7 +40,7 @@ export class Ghostofavm extends Contract {
     return Global.zeroAddress
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   public blkData(firstRound: uint64, lastRound: uint64): BlkData {
     for (let round: uint64 = firstRound; round <= lastRound; round++) {
       const blkData: BlkData = {
@@ -54,13 +54,13 @@ export class Ghostofavm extends Contract {
     return { round: 0, timestamp: 0, proposer: Global.zeroAddress, txnCounter: 0 }
   }
 
-  @abimethod({ readonly: true, onCreate: 'require' })
+  @abimethod({ readonly: true, onCreate: 'allow' })
   public acctBalanceData(accounts: Account[]): AcctBalanceData {
     for (const account of accounts) {
       const acctBalanceData: AcctBalanceData = {
         address: account,
-        balance: account.balance,
-        minBalance: account.minBalance,
+        balance: op.balance(account), // account.balance asserts non zero. we dont want that
+        minBalance: op.minBalance(account),
       }
       log(encodeArc4(acctBalanceData))
     }

@@ -1,4 +1,4 @@
-# Ghostkit & Ghost contracts
+# Ghostkit & Ghost contracts on Algorand
 
 Ghost contracts: Contracts that do not exist on chain. They are simulated (created on the fly) to return data efficiently from the AVM.
 
@@ -6,7 +6,9 @@ Ghostkit: toy to generate client SDKs for Ghost contracts from ARC-56 specs.
 
 ## Why?
 
-Why? In AVM context, you have access to a lot resources that can be fetched/filtered/combined with a single simulate:
+### Why AVM code from client?
+
+In AVM context, you have access to a lot resources that can be fetched/filtered/combined with a single simulate:
 
 - 128x apps, assets, accounts*
   - e.g. get asset or app information in bulk
@@ -17,6 +19,16 @@ Why? In AVM context, you have access to a lot resources that can be fetched/filt
   - e.g. timestamp + txn counter to calculate TPS
 
 _* You can simulate with 128x account references instead of the usual 64x for real calls_
+
+### Why ghost contract?
+
+Why do it with a ghost contract instead of a deployed application?
+
+Usually because you need portability to all networks (e.g. explorers, supporting localnets, etc.) or zero-dependency code (a deployed application being updated will not break your code.)
+
+Other reasons could include minimizing the operational complexity (read: laziness) of maintaining contracts for the purpose of simulating reads against.
+
+⚠ If you only care about a single network, a deployed application that you simulate against will outperform a ghost contract. Requests will be smaller on the wire, because the application bytecode does not need to be included on every request, and executing will usually be faster (undocumented empirical finding.)
 
 ## How
 

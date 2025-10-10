@@ -1,6 +1,7 @@
 import { Config } from '@algorandfoundation/algokit-utils'
 import { registerDebugEventHandlers } from '@algorandfoundation/algokit-utils-debug'
 import { algorandFixture } from '@algorandfoundation/algokit-utils/testing'
+import { generateAccount } from 'algosdk'
 import pMap from 'p-map'
 import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { GhostofavmSDK } from '../artifacts/ghostofavm/GhostofavmSDK'
@@ -54,7 +55,6 @@ describe('Ghostofavm contract', () => {
 
   test('blkProposer', async () => {
     const { algorand } = localnet
-
     const { lastRound } = await localnet.algorand.client.algod.status().do()
     const firstRound = lastRound - 1000n >= 1n ? lastRound - 1000n : 1n
 
@@ -98,7 +98,10 @@ describe('Ghostofavm contract', () => {
     const firstValidRound = lastRound + 1n
     const lastValidRound = lastRound + 1n
 
-    const values = await sdk.blkData({ firstRound, lastRound }, { firstValidRound, lastValidRound })
+    const values = await sdk.blkData(
+      { firstRound, lastRound },
+      { extraFee: (2000).microAlgo(), firstValidRound, lastValidRound },
+    )
 
     console.timeEnd(`Simulate blkData`)
 
@@ -123,8 +126,68 @@ describe('Ghostofavm contract', () => {
     )
     console.timeEnd(timeLabel)
   })
+
+  test('acctBalanceData multi', async () => {
+    const { algorand } = localnet
+
+    const accounts = await Promise.all(
+      new Array(63).fill(1).map(async (_) => {
+        const { addr } = generateAccount()
+        await algorand.account.ensureFundedFromEnvironment(addr, (1).algo())
+        return addr.toString()
+      }),
+    )
+    const accounts2 = await Promise.all(
+      new Array(63).fill(1).map(async (_) => {
+        const { addr } = generateAccount()
+        await algorand.account.ensureFundedFromEnvironment(addr, (2).algo())
+        return addr.toString()
+      }),
+    )
+    const accounts3 = await Promise.all(
+      new Array(2).fill(1).map(async (_) => {
+        const { addr } = generateAccount()
+        await algorand.account.ensureFundedFromEnvironment(addr, (0).algo())
+        return addr.toString()
+      }),
+    )
+
+    const sdk = new GhostofavmSDK({ algorand })
+
+    console.log('About to sim')
+    await sleep(5000)
+
+    console.time(`Simulate acctBalanceData`)
+    const values = await sdk.acctBalanceData([{ accounts }, { accounts: accounts2 }, { accounts: accounts3 }])
+    console.timeEnd(`Simulate acctBalanceData`)
+
+    console.log('simmed')
+    await sleep(5000)
+
+    const timeLabel = 'fetch ' + values.length
+    console.time(timeLabel)
+    await pMap(
+      values,
+      async ({ address, balance: balanceActual, minBalance: minBalanceActual }) => {
+        {
+          const { balance: balanceExpected, minBalance: minBalanceExpected } =
+            await algorand.account.getInformation(address)
+
+          expect(balanceActual).toBe(balanceExpected.microAlgo)
+          expect(minBalanceActual).toBe(minBalanceExpected.microAlgo)
+        }
+      },
+      { concurrency: 100 },
+    )
+    console.timeEnd(timeLabel)
+    expect(values.length).toBe([...accounts, ...accounts2, ...accounts3].length)
+  })
 })
 
 function zip<K extends PropertyKey, V>(keys: K[], values: V[]): Record<K, V> {
   return Object.fromEntries(keys.map((key, i) => [key, values[i]])) as Record<K, V>
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
